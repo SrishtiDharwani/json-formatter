@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Input from "./components/Input/Input";
+import Output from "./components/Output/Output";
+import Buttons from "./components/Buttons/Buttons";
+import Header from "./components/Header/Header";
+import "./index.css";
 
 function App() {
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+
+  const messageHandler = (event) => {
+    setInput(event.target.value);
+  };
+
+  let formatted;
+  const formatJsonHandler = (event) => {
+    try {
+      formatted = JSON.stringify(JSON.parse(input),null,4);
+      console.log(formatted);
+      setOutput(formatted);
+      console.log(output);
+    } catch (err) {
+      setOutput(err.message);
+    }
+  };
+
+  const clearDataHandler=event=>{
+    setInput('');
+    setOutput('');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Buttons formatJsonHandler={formatJsonHandler} clearDataHandler={clearDataHandler} />
+      <Header />
+
+      <div className="flex-container">
+        <div className="column">
+          <Input messageHandler={messageHandler} input={input} />
+        </div>
+
+        <div className="column">
+          <Output formattedJson={output} />
+        </div>
+      </div>
+    </React.Fragment>
   );
 }
 
